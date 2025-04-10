@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My RC Truck Project - Improved</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --gray-color: #95a5a6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .tab-button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 5px;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .tab-button:hover {
+            background-color: #d5dbdb;
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Components Section Styles */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .component-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .component-name {
+            font-weight: 700;
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .component-spec {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Control Panel Styles */
+        .control-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .control-panel h2 {
+            color: var(--dark-color);
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-group h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-group h3::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* Slider Controls */
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #2980b9;
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(236, 240, 241, 0.5);
+            border-radius: 6px;
+        }
+
+        .indicator-light {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 12px;
+            background-color: var(--gray-color);
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .indicator-light.active {
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+        }
+
+        .indicator-light.warning {
+            background-color: var(--warning-color);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+
+        .indicator-light.danger {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Battery Display */
+        .battery-display {
+            height: 120px;
+            border: 3px solid var(--dark-color);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+
+        .battery-level {
+            height: 100%;
+            background: linear-gradient(to top, var(--secondary-color), #27ae60);
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .battery-level::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, 
+                rgba(255,255,255,0.3) 0%, 
+                rgba(255,255,255,0) 50%, 
+                rgba(0,0,0,0.1) 51%, 
+                rgba(0,0,0,0) 100%);
+        }
+
+        .battery-percent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .control-panel {
+                padding: 15px;
+            }
+            
+            .tab-button {
+                padding: 10px 15px;
+                margin: 5px 2px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation Effects */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My RC Truck Project</h1>
+            <p>Custom Built Remote Control Truck with Advanced Features</p>
+        </div>
+        
+        <div class="tabs-container" style="text-align: center; margin-bottom: 20px;">
+            <button class="tab-button active" onclick="openTab('components')">Required Components</button>
+            <button class="tab-button" onclick="openTab('control')">Control Panel</button>
+            <button class="tab-button" onclick="openTab('steering')">Steering</button>
+            <button class="tab-button" onclick="openTab('monitoring')">System Monitoring</button>
+        </div>
+        
+        <!-- Components Tab -->
+        <div id="components" class="tab-content active">
+            <div class="control-panel">
+                <h2>Components Used in This Project</h2>
+                <div class="component-grid">
+                    <div class="component-card">
+                        <div class="component-name">Motor</div>
+                        <div class="component-spec">MY1016Z 12V 250W</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">ESC</div>
+                        <div class="component-spec">ESC60A</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">UBEC</div>
+                        <div class="component-spec">5V 5A</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Sound & Light System</div>
+                        <div class="component-spec">GT Power</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Servo</div>
+                        <div class="component-spec">80kg (2 units)</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">GearBox & Steering</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Fuse</div>
+                        <div class="component-spec">ANL 60A</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Cooling Fan</div>
+                        <div class="component-spec">12V</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Temperature Sensor</div>
+                        <div class="component-spec">W1209</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">LED</div>
+                        <div class="component-spec">5mm</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Battery</div>
+                        <div class="component-spec">12V Lithium-Ion 40Ah<br>(3.7V 3400mAh cells, 3S config)</div>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-name">Remote Control</div>
+                        <div class="component-spec">Skyfly 10Ch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Control Panel Tab -->
+        <div id="control" class="tab-content">
+            <div class="control-panel">
+                <h2>Drive System Control</h2>
+                <div class="control-group">
+                    <div class="slider-container">
+                        <label for="throttle">Throttle Control</label>
+                        <input type="range" id="throttle" min="0" max="100" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <label for="brake">Brake Control</label>
+                        <input type="range" id="brake" min="0" max="100" value="0">
+                    </div>
+                    <div class="status-indicator">
+                        <div class="indicator-light" id="motor-status"></div>
+                        <span>Motor Status</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Steering Tab -->
+        <div id="steering" class="tab-content">
+            <div class="control-panel">
+                <h2>Steering Control</h2>
+                <div class="control-group">
+                    <div class="slider-container">
+                        <label for="steering">Steering Control</label>
+                        <input type="range" id="steering" min="-100" max="100" value="0">
+                    </div>
+                    <div class="status-indicator">
+                        <div class="indicator-light" id="servo-status"></div>
+                        <span>Servo Status</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Monitoring Tab -->
+        <div id="monitoring" class="tab-content">
+            <div class="control-panel">
+                <h2>System Monitoring</h2>
+                <div class="control-group">
+                    <h3>Battery Status</h3>
+                    <div class="battery-display">
+                        <div class="battery-level" id="battery-level" style="width: 85%;"></div>
+                        <div class="battery-percent" id="battery-percent">85%</div>
+                    </div>
+                    
+                    <h3>System Status</h3>
+                    <div class="status-indicator">
+                        <div class="indicator-light" id="temp-status"></div>
+                        <span>Temperature: <span id="temp-value">32°C</span></span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="indicator-light" id="fan-status"></div>
+                        <span>Cooling Fan</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="indicator-light" id="lights-status"></div>
+                        <span>Light System</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all buttons
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show the current tab and mark button as active
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Update battery display
+        function updateBattery(percent) {
+            const batteryLevel = document.getElementById('battery-level');
+            const batteryPercent = document.getElementById('battery-percent');
+            
+            batteryLevel.style.width = percent + '%';
+            batteryPercent.textContent = percent + '%';
+            
+            // Change color based on battery level
+            if (percent > 60) {
+                batteryLevel.style.background = 'linear-gradient(to top, var(--secondary-color), #27ae60)';
+            } else if (percent > 30) {
+                batteryLevel.style.background = 'linear-gradient(to top, var(--warning-color), #d35400)';
+            } else {
+                batteryLevel.style.background = 'linear-gradient(to top, var(--danger-color), #c0392b)';
+            }
+        }
+        
+        // Simulate battery drain for demo
+        let battery = 85;
+        updateBattery(battery);
+        
+        setInterval(() => {
+            battery -= 0.5;
+            if (battery < 0) battery = 100;
+            updateBattery(Math.round(battery));
+        }, 5000);
+        
+        // Update temperature display
+        function updateTemperature(temp) {
+            const tempValue = document.getElementById('temp-value');
+            const tempStatus = document.getElementById('temp-status');
+            
+            tempValue.textContent = temp + '°C';
+            
+            // Update status indicator
+            tempStatus.className = 'indicator-light';
+            if (temp > 60) {
+                tempStatus.classList.add('danger');
+            } else if (temp > 45) {
+                tempStatus.classList.add('warning');
+            } else {
+                tempStatus.classList.add('active');
+            }
+        }
+        
+        // Simulate temperature changes
+        let temp = 32;
+        updateTemperature(temp);
+        
+        setInterval(() => {
+            // Random temperature fluctuation
+            temp += (Math.random() * 2 - 1);
+            if (temp < 30) temp = 30;
+            if (temp > 70) temp = 70;
+            updateTemperature(Math.round(temp));
+        }, 3000);
+        
+        // Control event listeners
+        document.getElementById('throttle').addEventListener('input', function() {
+            const motorStatus = document.getElementById('motor-status');
+            motorStatus.className = 'indicator-light';
+            if (this.value > 0) {
+                motorStatus.classList.add('active');
+            }
+        });
+        
+        document.getElementById('steering').addEventListener('input', function() {
+            const servoStatus = document.getElementById('servo-status');
+            servoStatus.className = 'indicator-light';
+            if (this.value != 0) {
+                servoStatus.classList.add('active');
+            }
+        });
+        
+        // Toggle fan based on temperature
+        setInterval(() => {
+            const fanStatus = document.getElementById('fan-status');
+            fanStatus.className = 'indicator-light';
+            if (temp > 45) {
+                fanStatus.classList.add('active');
+            }
+        }, 1000);
+        
+        // Toggle lights randomly for demo
+        setInterval(() => {
+            const lightsStatus = document.getElementById('lights-status');
+            lightsStatus.className = 'indicator-light';
+            if (Math.random() > 0.3) {
+                lightsStatus.classList.add('active');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
+<!-- Tabs Container ကိုပြင်ဆင်ပါ -->
+<div class="tabs-container" style="text-align: center; margin-bottom: 20px;">
+    <button class="tab-button active" onclick="openTab('components')">Required Components</button>
+    <button class="tab-button" onclick="openTab('control')">Control Panel</button>
+    <button class="tab-button" onclick="openTab('steering')">Steering</button>
+    <button class="tab-button" onclick="openTab('monitoring')">System Monitoring</button>
+    <button class="tab-button" onclick="openTab('mechanical')">Mechanical Status</button>
+</div>
+
+<!-- Mechanical Status Tab ကိုဖြည့်စွက်ပါ -->
+<div id="mechanical" class="tab-content">
+    <div class="control-panel">
+        <h2>Mechanical System Status</h2>
+        
+        <div class="mechanical-visual">
+            <div class="component-visual">
+                <img src="assets/images/suspension-icon.png" alt="Suspension">
+                <h4>Suspension</h4>
+                <div class="indicator-light" id="visual-suspension"></div>
+                <p id="suspension-detail">Status: <span class="status-text" id="suspension-status">Checking...</span></p>
+            </div>
+            
+            <div class="component-visual">
+                <img src="assets/images/differential-icon.png" alt="Differential">
+                <h4>Differential</h4>
+                <div class="indicator-light" id="visual-differential"></div>
+                <p id="differential-detail">Status: <span class="status-text" id="differential-status">Checking...</span></p>
+            </div>
+            
+            <div class="component-visual">
+                <img src="assets/images/bearing-icon.png" alt="Bearings">
+                <h4>Bearings</h4>
+                <div class="indicator-light" id="visual-bearing"></div>
+                <p id="bearing-detail">Health: <span class="status-text" id="bearing-percent">100%</span></p>
+            </div>
+            
+            <div class="component-visual">
+                <img src="assets/images/brake-icon.png" alt="Brakes">
+                <h4>Brakes</h4>
+                <div class="indicator-light" id="visual-brake"></div>
+                <p id="brake-detail">Wear: <span class="status-text" id="brake-status">0% worn</span></p>
+            </div>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>Wheel Alignment</h3>
+                <div class="alignment-display" id="alignment-display"></div>
+                <p class="status-text" id="alignment-status">Good</p>
+            </div>
+            
+            <div class="status-card">
+                <h3>Drive Chain</h3>
+                <div class="indicator-light" id="chain-status"></div>
+                <p class="status-text" id="chain-tension">Tension: Optimal</p>
+            </div>
+            
+            <div class="status-card">
+                <h3>Shock Absorbers</h3>
+                <div class="indicator-light" id="shock-status"></div>
+                <p class="status-text" id="shock-travel">Travel: 75%</p>
+            </div>
+            
+            <div class="status-card">
+                <h3>Frame Integrity</h3>
+                <div class="indicator-light" id="frame-status"></div>
+                <p class="status-text" id="frame-stress">Stress: Low</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gear Shift Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .gears-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .gear {
+            padding: 15px 25px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .gear:hover {
+            background-color: #ccc;
+        }
+        
+        .gear.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .output-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .output-item {
+            margin-bottom: 10px;
+        }
+        
+        .output-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gears-container">
+        <div class="gear active" data-gear="1st">1st Gear</div>
+        <div class="gear" data-gear="2nd">2nd Gear</div>
+        <div class="gear" data-gear="3rd">3rd Gear</div>
+    </div>
+    
+    <div class="output-container">
+        <div class="output-item">
+            <span class="output-label">Current Gear:</span>
+            <span id="current-gear">1st</span>
+        </div>
+        <div class="output-item">
+            <span class="output-label">Output:</span>
+            <span id="output">100%</span>
+        </div>
+        <div class="output-item">
+            <span class="output-label">Ratio:</span>
+            <span id="ratio">3.75:1</span>
+        </div>
+        <div class="output-item">
+            <span class="output-label">Speed:</span>
+            <span id="speed">Low (High Torque)</span>
+        </div>
+    </div>
+
+    <script>
+        const gears = document.querySelectorAll('.gear');
+        const currentGearElement = document.getElementById('current-gear');
+        const outputElement = document.getElementById('output');
+        const ratioElement = document.getElementById('ratio');
+        const speedElement = document.getElementById('speed');
+        
+        // Gear data
+        const gearData = {
+            '1st': {
+                output: '100%',
+                ratio: '3.75:1',
+                speed: 'Low (High Torque)'
+            },
+            '2nd': {
+                output: '70%',
+                ratio: '2.50:1',
+                speed: 'Medium (Balanced)'
+            },
+            '3rd': {
+                output: '50%',
+                ratio: '1.25:1',
+                speed: 'High (Low Torque)'
+            }
+        };
+        
+        // Add click event listeners to gears
+        gears.forEach(gear => {
+            gear.addEventListener('click', () => {
+                // Remove active class from all gears
+                gears.forEach(g => g.classList.remove('active'));
+                
+                // Add active class to clicked gear
+                gear.classList.add('active');
+                
+                // Get gear type
+                const gearType = gear.getAttribute('data-gear');
+                
+                // Update output display
+                currentGearElement.textContent = gearType;
+                outputElement.textContent = gearData[gearType].output;
+                ratioElement.textContent = gearData[gearType].ratio;
+                speedElement.textContent = gearData[gearType].speed;
+            });
+        });
+    </script>
+</body>
+</html>
+<div class="component-card">
+    <div class="component-name">Gear System (3-Speed)</div>
+    <div class="component-spec">
+        04C Chain Sprocket Set:<br>
+        - 30T (1st gear)<br>
+        - 20T (2nd gear)<br>
+        - 10T (3rd gear)<br>
+        - 8T (x3, output gears)
+    </div>
+</div>
+
+<div class="component-card">
+    <div class="component-name">Transmission Chain</div>
+    <div class="component-spec">04C Roller Chain | 100 links</div>
+</div>
+
+<div class="component-card">
+    <div class="component-name">Gear Shifter</div>
+    <div class="component-spec">3-Position Servo Actuator | 25kg</div>
+</div>
+<!-- Add to your tabs-container div -->
+<button class="tab-button" onclick="openTab('circuit')">Circuit Diagram</button>
+
+<!-- Add with other tab-content divs -->
+<div id="circuit" class="tab-content">
+  <div class="control-panel">
+    <h2>Electrical System Connections</h2>
+    
+    <div class="connection-guide">
+      <h3>Power Distribution System</h3>
+      <div class="connection-diagram">
+        <pre>[12V 40Ah Li-ion Battery] 
+       │
+       ├───[60A ANL Fuse]───[Main Power Switch]───
+       │                                           │
+       │                                           ▼
+       │                                [ESC60A]───[MY1016Z 250W Motor]
+       │                                           │
+       ├───[5A UBEC]───[5V Power Distribution]     │
+       │       │                                  [Servo 80kg]×2
+       │       ├───[W1209 Temp Sensor]
+       │       ├───[GT Power Sound/Light System]
+       │       └───[Control Receiver]</pre>
+      </div>
+      
+      <div class="connection-steps">
+        <h3>Connection Details</h3>
+        <div class="step">
+          <h4>1. Battery Connections:</h4>
+          <ul>
+            <li>Battery positive (+) → 60A ANL Fuse → Main power switch</li>
+            <li>Battery negative (-) → Common ground bus</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <h4>2. ESC Connections:</h4>
+          <ul>
+            <li>ESC input (+) → Main power switch output</li>
+            <li>ESC input (-) → Common ground</li>
+            <li>ESC motor outputs → MY1016Z motor terminals (3 wires)</li>
+            <li>ESC servo signal → Channel 2 on receiver</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <h4>3. Wireless Control Setup:</h4>
+          <pre>Channel 1: Steering Servo
+Channel 2: ESC Throttle Control 
+Channel 3: Gear Shift Servo
+Channel 4: Light System Control
+Channel 5: Sound System Control</pre>
+        </div>
+      </div>
+      
+      <div class="safety-notes">
+        <h3>Safety Notes</h3>
+        <ul>
+          <li>Always connect transmitter first, then battery</li>
+          <li>Use 10AWG wire for battery to ESC connections</li>
+          <li>Verify all polarities before powering on</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add to your tabs-container div -->
+<button class="tab-button" onclick="openTab('battery-build')">Battery Construction</button>
+
+<!-- Add with other tab-content divs -->
+<div id="battery-build" class="tab-content">
+  <div class="control-panel">
+    <h2>12V 40Ah Lithium-Ion Battery Pack Construction</h2>
+    
+    <div class="battery-guide">
+      <h3>Cell Configuration: 3S12P (3 Series 12 Parallel)</h3>
+      <div class="configuration-diagram">
+        <pre>
+[ 18650 Cell (3.7V 3400mAh) ]  [ 18650 Cell ]  ... (12 cells in parallel)
+[ 18650 Cell (3.7V 3400mAh) ]  [ 18650 Cell ]  ... (12 cells in parallel)
+[ 18650 Cell (3.7V 3400mAh) ]  [ 18650 Cell ]  ... (12 cells in parallel)
+        </pre>
+        <p>Total: 36 cells (3 series × 12 parallel)</p>
+      </div>
+      
+      <div class="construction-steps">
+        <h3>Construction Steps</h3>
+        
+        <div class="step">
+          <h4>1. Cell Preparation:</h4>
+          <ul>
+            <li>Select matched 18650 cells (same brand, capacity, and age)</li>
+            <li>Test each cell voltage (should be 3.6V-3.7V when new)</li>
+            <li>Label cells for proper grouping</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <h4>2. Parallel Group Assembly (12P):</h4>
+          <ul>
+            <li>Connect 12 cells in parallel (all + terminals together, all - terminals together)</li>
+            <li>Use nickel strip (0.15mm × 7mm recommended)</li>
+            <li>Spot weld connections (do not solder directly to cells)</li>
+            <li>Repeat to make 3 identical parallel groups</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <h4>3. Series Connection (3S):</h4>
+          <ul>
+            <li>Connect parallel groups in series:
+              <pre>
+[Group 1 +] --- [Group 2 -] 
+[Group 2 +] --- [Group 3 -]
+              </pre>
+            </li>
+            <li>Final voltage: 11.1V nominal (12.6V fully charged)</li>
+            <li>Final capacity: 40.8Ah (3400mAh × 12)</li>
+          </ul>
+        </div>
+        
+        <div class="step">
+          <h4>4. Protection Circuit Installation:</h4>
+          <ul>
+            <li>Connect 3S BMS (Battery Management System):
+              <pre>
+BMS Connections:
+B-  → Battery negative (first parallel group)
+B1 → Between 1st and 2nd series group
+B2 → Between 2nd and 3rd series group
+B+  → Battery positive (last parallel group)
+P-  → Output negative
+P+  → Output positive
+              </pre>
+            </li>
+            <li>Use 40A continuous rated BMS</li>
+            <li>Secure all connections with heat shrink tubing</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="safety-notes">
+        <h3>Critical Safety Precautions</h3>
+        <ul>
+          <li>ALWAYS use spot welder - never solder directly to 18650 cells</li>
+          <li>Use protective glasses when assembling</li>
+          <li>Test each parallel group voltage before series connection</li>
+          <li>Balance charge for first 5 cycles</li>
+          <li>Never discharge below 9V (3V per cell)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add to your tabs-container div -->
+<button class="tab-button" onclick="openTab('shopping-guide')">Purchasing Guide</button>
+
+<!-- Add with other tab-content divs -->
+<div id="shopping-guide" class="tab-content">
+  <div class="control-panel">
+    <h2>RC Truck Parts Purchasing Guide</h2>
+    
+    <div class="shopping-guide">
+      <div class="platform-section">
+        <h3>Recommended Stores</h3>
+        
+        <div class="store-card">
+          <h4>AliExpress Trusted Sellers:</h4>
+          <ul>
+            <li><strong>RC Parts Official Store</strong> - Genuine MY1016 motors</li>
+            <li><strong>Battery Master</strong> - Authentic 18650 cells</li>
+            <li><strong>HobbyKing Direct</strong> - Quality ESCs and servos</li>
+            <li><strong>GT Power Store</strong> - Official sound/light systems</li>
+          </ul>
+        </div>
+        
+        <div class="store-card">
+          <h4>Lazada Thailand Trusted Sellers:</h4>
+          <ul>
+            <li><strong>RC Hobby Thailand</strong> - Local warranty available</li>
+            <li><strong>Battery House TH</strong> - Certified lithium batteries</li>
+            <li><strong>Truck Parts Center</strong> - Mechanical components</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="quality-section">
+        <h3>Quality Verification Methods</h3>
+        
+        <div class="verification-method">
+          <h4>1. Motor Verification:</h4>
+          <ul>
+            <li>Check for copper windings (not aluminum)</li>
+            <li>Look for genuine brand markings</li>
+            <li>Verify shaft diameter matches specs (10mm for MY1016)</li>
+          </ul>
+        </div>
+        
+        <div class="verification-method">
+          <h4>2. Battery Authentication:</h4>
+          <ul>
+            <li>Request factory test reports</li>
+            <li>Check for consistent welding spots</li>
+            <li>Verify weight (48-50g for genuine 18650 3400mAh)</li>
+          </ul>
+        </div>
+        
+        <div class="verification-method">
+          <h4>3. ESC Quality Checks:</h4>
+          <ul>
+            <li>Inspect MOSFET quality (should be branded)</li>
+            <li>Check heat sink thickness (minimum 2mm)</li>
+            <li>Verify wire gauge (10AWG for 60A models)</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="avoidance-section">
+        <h3>Red Flags to Avoid</h3>
+        <div class="warning-box">
+          <div class="warning-item">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">Prices significantly lower than market average</div>
+          </div>
+          <div class="warning-item">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">Sellers with no product reviews</div>
+          </div>
+          <div class="warning-item">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">Listings with stock photos only</div>
+          </div>
+          <div class="warning-item">
+            <div class="warning-icon">⚠️</div>
+            <div class="warning-text">No brand identification marks</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tips-section">
+        <h3>Purchasing Tips</h3>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <h4>Search Keywords</h4>
+            <p>"Original MY1016Z 250W motor"<br>
+            "Genuine Samsung 18650 3400mAh"<br>
+            "Authentic ESC60A waterproof"</p>
+          </div>
+          <div class="tip-card">
+            <h4>Filter Settings</h4>
+            <p>Minimum 4.5★ rating<br>
+            At least 100 orders<br>
+            "Local warehouse" option</p>
+          </div>
+          <div class="tip-card">
+            <h4>Messaging Sellers</h4>
+            <p>"Can you provide real product photos?"<br>
+            "What is the country of origin?"<br>
+            "Do you offer warranty?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
